@@ -1,0 +1,10 @@
+{
+  "name": "hello-word-babel",
+  "version": "1.0.0",
+  "description": "Hello Word em React usando o Babel",
+  "scripts": {},
+  "author": "Daniel Martins",
+  "devDependencies": {
+    "babel-preset-react": "^6.24.1"
+  }
+}
