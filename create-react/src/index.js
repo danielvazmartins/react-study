@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import List from './List';
 import './index.css';
 
 ReactDOM.render(
-  <App />,
-  document.getElementById('root')
+  	<div className="container">
+  		<div className="row text-center">	
+			<h1>React</h1>
+		</div>
+  		<List /> 		
+  	</div>,
+  	document.getElementById('root')
 );
