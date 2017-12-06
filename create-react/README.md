@@ -13,3 +13,4 @@ npm start
 https://reactjs.org/docs/installation.html#creating-a-new-application
 https://reactjs.org/tutorial/tutorial.html
 https://daveceddia.com/ajax-requests-in-react/
+https://www.schoolofnet.com/canal-direto-ao-ponto/navegacao-e-rotas-com-react-navigation/

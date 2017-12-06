@@ -23,7 +23,6 @@ class List extends Component {
 	render() {
 		var noteItem = this.state.notifications.map(function(notification){
             return (
-            	//<li>lista separada</li>
             	<ListItem key={notification.id} id={notification.id} href={notification.url} src={notification.image}>{notification.title}</ListItem>
             );
         });
