@@ -1,4 +1,4 @@
-## React com Redux
+# React com Redux
 Pequena aplicação de teste para utilizar o Redux junto com o React
 
 ## Criar a estrutura do projeto
@@ -13,3 +13,4 @@ npm run server // Verificar o comando no package.json
 
 ## Fontes
 https://www.schoolofnet.com/canal-direto-ao-ponto/intro-ao-react-redux/
+https://www.npmjs.com/package/live-server

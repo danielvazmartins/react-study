@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "watchify src/app.js -o public/js/main.js -t [ babelify --presets [ react es2015 ] ]",
-    "server": "live-server --port=8888 --entry-file=index.html"
+    "server": "live-server --open=public --port=8888 --entry-file=index.html"
   },
   "author": "Daniel Vaz Villalobos Martins",
   "license": "ISC",
