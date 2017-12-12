@@ -1,3 +1,4 @@
+// Reducer que vai adicionar um item
 const itens = (state, action) => {
     switch (action.type) {
         case 'NEW':
@@ -11,31 +12,56 @@ const itens = (state, action) => {
     }
 };
 
+// Coloca o reducer dentro do store
 const store = Redux.createStore(Redux.combineReducers({
     itens
 }));
 
-store.subscribe(() => {
-    console.log(store.getState());
-});
-
+// Adiciona um novo item
 store.dispatch({
     type: 'NEW',
     data: 'Item 1 redux'
 });
 
 const getItens = () => {
-    console.log('getItens');
     axios.get('https://jsonplaceholder.typicode.com/posts')
     .then((response) => {
         console.log(response);
-        store.dispatch({
-            type: 'NEW',
-            data: response.data[0].title
-        });
+        // Adiciona os itens retornados
+        for ( var i=0; i<5; i++) {
+            store.dispatch({
+                type: 'NEW',
+                data: response.data[i].title
+            });
+        }        
     });
 };
 
+// Componente para adiciona um novo item
+class AddItem extends React.Component {
+    render() {
+        var addItem = () => {
+            // Passa o valor do input para a função addItem do props
+            this.props.addItem(this.refs.item.value || '');
+            // Limpa o input
+            this.refs.item.value = '';
+        }
+
+        return(
+            <div className="form-group">
+                <label>Incluir novo item</label>
+                <div className="input-group">
+                    <input type="text" className="form-control" ref="item" />
+                    <span className="input-group-btn">
+                        <a className="btn btn-primary" onClick={addItem}>Salvar</a>
+                    </span>
+                </div>
+            </div>
+        );
+    }
+}
+
+// Componente da lista de itens
 class List extends React.Component {
     componentDidMount() {
         getItens();
@@ -50,34 +76,47 @@ class List extends React.Component {
             );
         });
 
-		return (
-            <div className="container">
-                <div className="row text-center">
-                    <h1>React com Redux</h1>
-                </div>
-                <ul className="list-group">
-                    <li className="list-group-item">
-                        Item 1
-                    </li>
-                    <li className="list-group-item">
-                        Item 2
-                    </li>
-                    <li className="list-group-item">
-                        Item 3
-                    </li>
-                    <li className="list-group-item">
-                        Item 4
-                    </li>
-                    {reduxItens}
-                </ul>
-            </div>
+		return (            
+            <ul className="list-group">
+                <li className="list-group-item">
+                    Item 1
+                </li>
+                <li className="list-group-item">
+                    Item 2
+                </li>
+                <li className="list-group-item">
+                    Item 3
+                </li>
+                {reduxItens}
+            </ul>
 		);
 	}
 };
 
-//getItens();
-var state = store.getState();
-ReactDOM.render(
-	<List itens={state.itens}>Testando</List>,
-	document.getElementById('root')
-);
+// Inicializa a tela
+let fnRender = () => {
+    var state = store.getState();
+
+    // Adiciona um novo item
+    var addItem = (newItem) => {
+        store.dispatch({
+            type: 'NEW',
+            data: newItem
+        });
+    }
+
+    ReactDOM.render(
+        <div className="container">
+            <div className="row text-center">
+                <h1>React com Redux</h1>
+            </div>
+            <AddItem addItem={text => addItem(text) }></AddItem>
+            <List itens={state.itens}></List>
+        </div>,
+        document.getElementById('root')
+    );
+};
+fnRender();
+
+// Renderiza a tela quando há alteração no state
+store.subscribe(fnRender);

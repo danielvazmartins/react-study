@@ -9,6 +9,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// Reducer que vai adicionar um item
 var itens = function itens(state, action) {
     switch (action.type) {
         case 'NEW':
@@ -22,32 +23,82 @@ var itens = function itens(state, action) {
     }
 };
 
+// Coloca o reducer dentro do store
 var store = Redux.createStore(Redux.combineReducers({
     itens: itens
 }));
 
-store.subscribe(function () {
-    console.log(store.getState());
-});
-
+// Adiciona um novo item
 store.dispatch({
     type: 'NEW',
     data: 'Item 1 redux'
 });
 
 var getItens = function getItens() {
-    console.log('getItens');
     axios.get('https://jsonplaceholder.typicode.com/posts').then(function (response) {
         console.log(response);
-        store.dispatch({
-            type: 'NEW',
-            data: response.data[0].title
-        });
+        // Adiciona os itens retornados
+        for (var i = 0; i < 5; i++) {
+            store.dispatch({
+                type: 'NEW',
+                data: response.data[i].title
+            });
+        }
     });
 };
 
-var List = function (_React$Component) {
-    _inherits(List, _React$Component);
+var AddItem = function (_React$Component) {
+    _inherits(AddItem, _React$Component);
+
+    function AddItem() {
+        _classCallCheck(this, AddItem);
+
+        return _possibleConstructorReturn(this, (AddItem.__proto__ || Object.getPrototypeOf(AddItem)).apply(this, arguments));
+    }
+
+    _createClass(AddItem, [{
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var addItem = function addItem() {
+                // Passa o valor do input para a função addItem do props
+                _this2.props.addItem(_this2.refs.item.value || '');
+                // Limpa o input
+                _this2.refs.item.value = '';
+            };
+
+            return React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement(
+                    'label',
+                    null,
+                    'Incluir novo item'
+                ),
+                React.createElement(
+                    'div',
+                    { className: 'input-group' },
+                    React.createElement('input', { type: 'text', className: 'form-control', ref: 'item' }),
+                    React.createElement(
+                        'span',
+                        { className: 'input-group-btn' },
+                        React.createElement(
+                            'a',
+                            { className: 'btn btn-primary', onClick: addItem },
+                            'Salvar'
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AddItem;
+}(React.Component);
+
+var List = function (_React$Component2) {
+    _inherits(List, _React$Component2);
 
     function List() {
         _classCallCheck(this, List);
@@ -72,42 +123,24 @@ var List = function (_React$Component) {
             });
 
             return React.createElement(
-                'div',
-                { className: 'container' },
+                'ul',
+                { className: 'list-group' },
                 React.createElement(
-                    'div',
-                    { className: 'row text-center' },
-                    React.createElement(
-                        'h1',
-                        null,
-                        'React com Redux'
-                    )
+                    'li',
+                    { className: 'list-group-item' },
+                    'Item 1'
                 ),
                 React.createElement(
-                    'ul',
-                    { className: 'list-group' },
-                    React.createElement(
-                        'li',
-                        { className: 'list-group-item' },
-                        'Item 1'
-                    ),
-                    React.createElement(
-                        'li',
-                        { className: 'list-group-item' },
-                        'Item 2'
-                    ),
-                    React.createElement(
-                        'li',
-                        { className: 'list-group-item' },
-                        'Item 3'
-                    ),
-                    React.createElement(
-                        'li',
-                        { className: 'list-group-item' },
-                        'Item 4'
-                    ),
-                    reduxItens
-                )
+                    'li',
+                    { className: 'list-group-item' },
+                    'Item 2'
+                ),
+                React.createElement(
+                    'li',
+                    { className: 'list-group-item' },
+                    'Item 3'
+                ),
+                reduxItens
             );
         }
     }]);
@@ -117,12 +150,39 @@ var List = function (_React$Component) {
 
 ;
 
-//getItens();
-var state = store.getState();
-ReactDOM.render(React.createElement(
-    List,
-    { itens: state.itens },
-    'Testando'
-), document.getElementById('root'));
+// Inicializa a tela
+var fnRender = function fnRender() {
+    var state = store.getState();
+
+    // Adiciona um novo item
+    var _addItem = function _addItem(newItem) {
+        store.dispatch({
+            type: 'NEW',
+            data: newItem
+        });
+    };
+
+    ReactDOM.render(React.createElement(
+        'div',
+        { className: 'container' },
+        React.createElement(
+            'div',
+            { className: 'row text-center' },
+            React.createElement(
+                'h1',
+                null,
+                'React com Redux'
+            )
+        ),
+        React.createElement(AddItem, { addItem: function addItem(text) {
+                return _addItem(text);
+            } }),
+        React.createElement(List, { itens: state.itens })
+    ), document.getElementById('root'));
+};
+fnRender();
+
+// Renderiza a tela quando há alteração no state
+store.subscribe(fnRender);
 
 },{}]},{},[1]);

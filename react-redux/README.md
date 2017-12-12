@@ -13,4 +13,6 @@ npm run server // Verificar o comando no package.json
 
 ## Fontes
 https://www.schoolofnet.com/canal-direto-ao-ponto/intro-ao-react-redux/
+https://www.schoolofnet.com/curso-react-com-redux/2380
 https://www.npmjs.com/package/live-server
+https://jsonplaceholder.typicode.com/
